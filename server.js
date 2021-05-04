@@ -1,14 +1,13 @@
 const fs = require('fs');
 const express = require('express');
-const PORT = process.env.PORT || 3008;
+const PORT = process.env.PORT || 3007;
 const app = express();
 const path = require('path');
 const { dataText } = require("./miniature-eureka/Develop/db/db.json");
 
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static('miniature-eureka/Develop/public'));
+app.use(express.static('./miniature-eureka/Develop/public'));
 
 app.get('/api/notes', (req, res) => {
     fs.readFile('./miniature-eureka/Develop/db/db.json','utf8', function(err, results) {
@@ -63,24 +62,36 @@ function findById(id, textArray) {
 app.delete('/api/notes/:id', (req, res) => {
   console.log('id to delete', req.params.id)
 
-  var newNotes = [  {
-    "id": "0",
-    "title": "Hey",
-    "text": "Test text"
-  }]
+//   var newNotes = [  {
+//     "id": "0",
+//     "title": "Hey",
+//     "text": "Test text"
+//   }]
 
-  for (let i = 0; i < dataText.length; i++) {
-      if(dataText.id !== req.params.id){
-        newNotes.push(dataText)
-      }
-      
-  }
-  console.log('Notes minus the one we detele', newNotes)
-  fs.writeFileSync(
-    path.join(__dirname, './miniature-eureka/Develop/db/db.json'),
-    JSON.stringify({"dataText":newNotes})
-);
-res.json(dataText)
+  
+  fs.readFile('./miniature-eureka/Develop/db/db.json','utf8', function(err, results) {
+      var oldNotes = JSON.parse(results)
+      var newNotes = []
+    for (let i = 0; i < oldNotes.length; i++) {
+        if(oldNotes[i].id !== req.params.id){
+          newNotes.push(oldNotes[i])
+        }
+        
+    }
+
+    fs.writeFileSync(
+        path.join(__dirname, './miniature-eureka/Develop/db/db.json'),
+        JSON.stringify(newNotes), function(err) {
+           
+        }   
+    );
+    res.json(newNotes)
+  })
+
+
+  //console.log('Notes minus the one we detele', newNotes)
+ 
+
 
 })
 
