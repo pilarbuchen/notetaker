@@ -3,7 +3,7 @@ const express = require('express');
 const PORT = process.env.PORT || 3007;
 const app = express();
 const path = require('path');
-//const { dataText } = require("./miniature-eureka/Develop/db/db.json");
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -21,7 +21,7 @@ app.get('/api/notes/:id', (req, res) => {
     fs.readFile('./miniature-eureka/Develop/db/db.json','utf8', function(err, results) {
         req.body.id = JSON.parse(results).length.toString();
 
-        const result = findById(req.params.id, dataText);
+        const result = findById(req.params.id);
         if (result) {
             
             res.json(result);
