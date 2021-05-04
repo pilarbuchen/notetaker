@@ -7,10 +7,10 @@ const path = require('path');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static('./miniature-eureka/Develop/public'));
+app.use(express.static('public'));
 
 app.get('/api/notes', (req, res) => {
-    fs.readFile('./miniature-eureka/Develop/db/db.json','utf8', function(err, results) {
+    fs.readFile('./db/db.json','utf8', function(err, results) {
         console.log('results', JSON.parse(results))
         res.json(JSON.parse(results))
     })
@@ -18,7 +18,7 @@ app.get('/api/notes', (req, res) => {
 
 app.get('/api/notes/:id', (req, res) => {
 
-    fs.readFile('./miniature-eureka/Develop/db/db.json','utf8', function(err, results) {
+    fs.readFile('./db/db.json','utf8', function(err, results) {
         req.body.id = JSON.parse(results).length.toString();
 
         const result = findById(req.params.id);
@@ -35,7 +35,7 @@ app.get('/api/notes/:id', (req, res) => {
 app.post('/api/notes', (req, res) => {
     console.log('Req. body!!!',req.body )
 
-    fs.readFile('./miniature-eureka/Develop/db/db.json','utf8', function(err, results) {
+    fs.readFile('./db/db.json','utf8', function(err, results) {
         req.body.id = JSON.parse(results).length.toString();
 
 
@@ -48,7 +48,7 @@ function createText(body, textArray) {
     const text = body;
     textArray.push(text);
     fs.writeFileSync(
-        path.join(__dirname, './miniature-eureka/Develop/db/db.json'),
+        path.join(__dirname, './db/db.json'),
         JSON.stringify(textArray , null, 2)
     );
     return text;
@@ -69,7 +69,7 @@ app.delete('/api/notes/:id', (req, res) => {
 //   }]
 
   
-  fs.readFile('./miniature-eureka/Develop/db/db.json','utf8', function(err, results) {
+  fs.readFile('./db/db.json','utf8', function(err, results) {
       var oldNotes = JSON.parse(results)
       var newNotes = []
     for (let i = 0; i < oldNotes.length; i++) {
@@ -80,7 +80,7 @@ app.delete('/api/notes/:id', (req, res) => {
     }
 
     fs.writeFileSync(
-        path.join(__dirname, './miniature-eureka/Develop/db/db.json'),
+        path.join(__dirname, './db/db.json'),
         JSON.stringify(newNotes), function(err) {
            
         }   
@@ -96,11 +96,11 @@ app.delete('/api/notes/:id', (req, res) => {
 })
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, 'miniature-eureka/Develop/public/index.html'));
+    res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 app.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, 'miniature-eureka/Develop/public/notes.html'));
+    res.sendFile(path.join(__dirname, './public/notes.html'));
 });
 
 app.listen(PORT, () => {
