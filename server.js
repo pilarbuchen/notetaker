@@ -3,7 +3,7 @@ const express = require('express');
 const PORT = process.env.PORT || 3007;
 const app = express();
 const path = require('path');
-const { dataText } = require("./miniature-eureka/Develop/db/db.json");
+//const { dataText } = require("./miniature-eureka/Develop/db/db.json");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
